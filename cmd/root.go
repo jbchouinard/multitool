@@ -6,6 +6,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var Version = "0.1.0"
+
 var rootCmd = &cobra.Command{
 	Use:   "multitool",
 	Short: "Grab bag of dev utilities.",
@@ -16,8 +18,4 @@ func Execute() {
 	if err != nil {
 		os.Exit(1)
 	}
-}
-
-func init() {
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

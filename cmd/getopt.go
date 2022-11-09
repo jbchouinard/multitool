@@ -25,5 +25,4 @@ var getOptCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(getOptCmd)
-
 }
