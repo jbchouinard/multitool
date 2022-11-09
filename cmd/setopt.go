@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/jbchouinard/multitool/config"
 	"github.com/jbchouinard/multitool/history"
@@ -13,7 +14,10 @@ var setOptCmd = &cobra.Command{
 	Short: "Set option value",
 	Args:  cobra.ExactArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
-		config.SetOption(args[0], args[1])
+		if err := config.Set(args[0], args[1]); err != nil {
+			fmt.Print(err)
+			os.Exit(1)
+		}
 		history.Add("set", fmt.Sprintf("%s %s", args[0], args[1]))
 	},
 }

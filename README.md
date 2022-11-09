@@ -35,6 +35,13 @@ Set an option value.
 | clipboard | yes/no | no      | Enable clipboard integration. |
 | history   | yes/no | yes     | Save history.                 |
 
+### unset
+```sh
+multitool unset <key>
+```
+
+Unset an option value.
+
 ### get
 ```sh
 multitool get <key>

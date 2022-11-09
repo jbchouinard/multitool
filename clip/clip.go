@@ -10,7 +10,7 @@ import (
 var enabled bool
 
 func init() {
-	enabled = config.GetOption("clipboard") == "yes"
+	enabled = config.Get("clipboard") == "yes"
 
 	if enabled {
 		err := clipboard.Init()
