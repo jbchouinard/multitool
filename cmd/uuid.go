@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/gofrs/uuid"
-	"github.com/jbchouinard/multitool/clip"
-	"github.com/jbchouinard/multitool/history"
+	"github.com/jbchouinard/wmt/clip"
+	"github.com/jbchouinard/wmt/history"
 	"github.com/spf13/cobra"
 )
 

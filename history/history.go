@@ -4,16 +4,18 @@ import (
 	"database/sql"
 	"time"
 
-	"github.com/jbchouinard/multitool/config"
-	"github.com/jbchouinard/multitool/database"
-	"github.com/jbchouinard/multitool/errored"
+	"github.com/jbchouinard/wmt/config"
+	"github.com/jbchouinard/wmt/database"
+	"github.com/jbchouinard/wmt/errored"
 )
 
 var enabled bool
 
 func init() {
+	config.ValidValues["history"] = map[string]bool{"yes": true, "no": true}
+	config.DefaultValues["history"] = "yes"
 	enabled = config.Get("history") == "yes"
-	err := database.TxExec("CREATE TABLE IF NOT EXISTS history (ts TIMESTAMP, key TEXT, value TEXT)")
+	_, err := database.TxExec("CREATE TABLE IF NOT EXISTS history (ts TIMESTAMP, key TEXT, value TEXT)")
 	errored.Check(err, "init db.history")
 }
 
@@ -28,7 +30,7 @@ func Add(k string, v string) {
 		return
 	}
 	ts := time.Now().UTC()
-	err := database.TxExec(
+	_, err := database.TxExec(
 		"INSERT INTO history (ts, key, value) VALUES (?, ?, ?)",
 		ts, k, v,
 	)
@@ -36,7 +38,7 @@ func Add(k string, v string) {
 }
 
 func Purge(asOf time.Time) {
-	err := database.TxExec(
+	_, err := database.TxExec(
 		"DELETE FROM history WHERE ts < ?",
 		asOf,
 	)

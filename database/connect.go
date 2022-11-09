@@ -5,8 +5,8 @@ import (
 	"database/sql"
 	"path/filepath"
 
-	"github.com/jbchouinard/multitool/errored"
-	"github.com/jbchouinard/multitool/path"
+	"github.com/jbchouinard/wmt/errored"
+	"github.com/jbchouinard/wmt/path"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -43,5 +43,5 @@ func Tx(f func(tx *sql.Tx) error) error {
 }
 
 func init() {
-	dbFile = filepath.Join(path.WorkDir, "multitool.db")
+	dbFile = filepath.Join(path.WorkDir, "sqlite3.db")
 }

@@ -1,4 +1,4 @@
-module github.com/jbchouinard/multitool
+module github.com/jbchouinard/wmt
 
 go 1.19
 

@@ -1,9 +1,9 @@
 package cmd
 
 import (
-	"github.com/jbchouinard/multitool/config"
-	"github.com/jbchouinard/multitool/errored"
-	"github.com/jbchouinard/multitool/history"
+	"github.com/jbchouinard/wmt/config"
+	"github.com/jbchouinard/wmt/errored"
+	"github.com/jbchouinard/wmt/history"
 	"github.com/spf13/cobra"
 )
 

@@ -8,7 +8,7 @@ import (
 func Check(err error, msg string) {
 	if err != nil {
 		fmt.Fprintln(os.Stderr, msg)
-		fmt.Fprint(os.Stderr, err)
+		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 }
@@ -16,7 +16,17 @@ func Check(err error, msg string) {
 func Checkf(err error, msg string, args ...any) {
 	if err != nil {
 		fmt.Fprintf(os.Stderr, msg+"\n", args...)
-		fmt.Fprint(os.Stderr, err)
+		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
+}
+
+func Fatal(msg string) {
+	fmt.Fprintln(os.Stderr, msg)
+	os.Exit(1)
+}
+
+func Fatalf(msg string, args ...any) {
+	fmt.Fprintf(os.Stderr, msg+"\n", args...)
+	os.Exit(1)
 }

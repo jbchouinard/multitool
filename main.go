@@ -1,6 +1,6 @@
 package main
 
-import "github.com/jbchouinard/multitool/cmd"
+import "github.com/jbchouinard/wmt/cmd"
 
 func main() {
 	cmd.Execute()

@@ -9,8 +9,8 @@ import (
 var Version = "0.1.0"
 
 var rootCmd = &cobra.Command{
-	Use:   "multitool",
-	Short: "Grab bag of dev utilities.",
+	Use:   "wmt",
+	Short: "A collection of web dev utilities.",
 }
 
 func Execute() {

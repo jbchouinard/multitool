@@ -5,19 +5,22 @@ import (
 	"database/sql"
 )
 
-func TxExec(query string, args ...any) error {
+func TxExec(query string, args ...any) (sql.Result, error) {
 	conn := Conn()
 	tx, err := conn.BeginTx(context.Background(), &sql.TxOptions{})
 	if err != nil {
-		return err
+		return nil, err
 	}
 	defer tx.Rollback()
 
-	_, err = tx.Exec(query, args...)
+	res, err := tx.Exec(query, args...)
 	if err == nil {
-		return tx.Commit()
+		err = tx.Commit()
 	}
-	return err
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }
 
 type TxQueryFunc func(func(*sql.Rows) error) error

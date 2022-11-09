@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/jbchouinard/multitool/config"
+	"github.com/jbchouinard/wmt/config"
 	"github.com/spf13/cobra"
 )
 

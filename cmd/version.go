@@ -11,7 +11,7 @@ var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Print version",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("multitool version %s %s/%s\n", Version, runtime.GOOS, runtime.GOARCH)
+		fmt.Printf("wmt version %s %s/%s\n", Version, runtime.GOOS, runtime.GOARCH)
 	},
 }
 
