@@ -7,8 +7,7 @@ A (currently very small) collection of utility commands with rich features:
 ## Installation
 
 ### Requirements
-- go 1.19+
-- macOS: Cgo
+- go 1.19+, gcc, Cgo
 - Linux: X11 dev package, e.g. libx11-dev, xorg-dev or libX11-devel.
 
 ```sh

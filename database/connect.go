@@ -16,13 +16,13 @@ var dbConn *sql.Conn
 func Conn() *sql.Conn {
 	if dbConn == nil {
 		db, err := sql.Open("sqlite3", dbFile)
-		errored.Fatal("db open", err)
+		errored.Check(err, "db open")
 		db.SetConnMaxIdleTime(0)
 		db.SetConnMaxLifetime(0)
 		db.SetMaxOpenConns(1)
 		db.SetMaxOpenConns(1)
 		dbConn, err = db.Conn(context.Background())
-		errored.Fatal("db connect", err)
+		errored.Check(err, "db connect")
 	}
 	return dbConn
 }

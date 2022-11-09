@@ -8,7 +8,7 @@ import (
 )
 
 var getOptCmd = &cobra.Command{
-	Use:   "get",
+	Use:   "get <key>",
 	Short: "Get option value",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {

@@ -1,9 +1,12 @@
 package path
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
+
+	"github.com/jbchouinard/multitool/errored"
 )
 
 var WorkDir string
@@ -11,11 +14,9 @@ var WorkDir string
 func init() {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
-		log.Print("could not get user home dir, using current dir")
+		fmt.Print("could not get user home dir, using current dir")
 		currentDir, err := os.Getwd()
-		if err != nil {
-			log.Fatal(err)
-		}
+		errored.Check(err, "path init")
 		WorkDir = filepath.Join(currentDir, ".multitool")
 	} else {
 		WorkDir = filepath.Join(homeDir, ".multitool")

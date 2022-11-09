@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/gofrs/uuid"
 	"github.com/jbchouinard/multitool/clip"
@@ -24,7 +23,7 @@ var uuidCmd = &cobra.Command{
 			id, err = uuid.NewV1()
 		}
 		if err != nil {
-			log.Fatal(err)
+			panic(err)
 		} else {
 			fmt.Println(id)
 			clip.WriteBytes(id.Bytes())

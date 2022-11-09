@@ -1,7 +1,7 @@
 package clip
 
 import (
-	"log"
+	"fmt"
 
 	"github.com/jbchouinard/multitool/config"
 	"golang.design/x/clipboard"
@@ -15,7 +15,9 @@ func init() {
 	if enabled {
 		err := clipboard.Init()
 		if err != nil {
-			log.Fatalf("Clipboard failed to init: %s\nDisable with: multitool set clipboard no", err)
+			fmt.Println("Clipboard failed to init")
+			fmt.Println("Disable with: multitool set clipboard no")
+			panic(err)
 		}
 	}
 

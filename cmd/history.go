@@ -10,7 +10,7 @@ import (
 var count int
 
 var historyCmd = &cobra.Command{
-	Use:   "history",
+	Use:   "history <command>",
 	Short: "Show history",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {

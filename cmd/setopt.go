@@ -9,7 +9,7 @@ import (
 )
 
 var setOptCmd = &cobra.Command{
-	Use:   "set",
+	Use:   "set <key> <value>",
 	Short: "Set option value",
 	Args:  cobra.ExactArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {

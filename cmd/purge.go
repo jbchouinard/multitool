@@ -1,40 +1,24 @@
-/*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
-*/
 package cmd
 
 import (
-	"fmt"
+	"time"
 
+	"github.com/jbchouinard/multitool/history"
 	"github.com/spf13/cobra"
 )
 
-// purgeCmd represents the purge command
+var keepDays uint16
+
 var purgeCmd = &cobra.Command{
 	Use:   "purge",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Purge command history",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("purge called")
+		asOf := time.Now().UTC().AddDate(0, 0, -int(keepDays))
+		history.Purge(asOf)
 	},
 }
 
 func init() {
+	purgeCmd.Flags().Uint16Var(&keepDays, "keep-days", 7, "days of history to keep")
 	rootCmd.AddCommand(purgeCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// purgeCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// purgeCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
