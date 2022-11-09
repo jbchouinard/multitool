@@ -11,17 +11,27 @@ import (
 
 var WorkDir string
 
-func init() {
-	homeDir, err := os.UserHomeDir()
-	if err != nil {
-		fmt.Print("could not get user home dir, using current dir")
-		currentDir, err := os.Getwd()
-		errored.Check(err, "path init")
-		WorkDir = filepath.Join(currentDir, ".multitool")
-	} else {
-		WorkDir = filepath.Join(homeDir, ".multitool")
+func getWorkDir() string {
+	envDir, ok := os.LookupEnv("MULTITOOL_DIR")
+	if ok {
+		return envDir
 	}
-	os.MkdirAll(WorkDir, os.ModePerm)
+
+	homeDir, err := os.UserHomeDir()
+	if err == nil {
+		return filepath.Join(homeDir, ".multitool")
+	} else {
+		fmt.Fprint(os.Stderr, "could not get user home dir")
+	}
+
+	currentDir, err := os.Getwd()
+	errored.Check(err, "path init failed")
+	return filepath.Join(currentDir, ".multitool")
+}
+
+func init() {
+	WorkDir = getWorkDir()
+	err := os.MkdirAll(WorkDir, os.ModePerm)
 	if err != nil {
 		log.Fatalf("failed to create config dir %q: %s", WorkDir, err)
 	}
