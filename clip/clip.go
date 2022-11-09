@@ -11,7 +11,7 @@ var enabled bool
 
 func init() {
 	config.ValidValues["clipboard"] = map[string]bool{"yes": true, "no": true}
-	config.DefaultValues["clipboard"] = "yes"
+	config.DefaultValues["clipboard"] = "no"
 	enabled = config.Get("clipboard") == "yes"
 
 	if enabled {

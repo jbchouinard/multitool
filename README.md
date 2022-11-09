@@ -14,9 +14,9 @@ go install github.com/jbchouinard/wmt@latest
 
 ## Example
 ```sh
-# wmt set editor "subl -w -n" 
-# wmt set editor "vim"
-# wmt set editor "code -w -n"
+# wmt opt set editor "code -w -n"
+# wmt opt set editor "subl -w -n" 
+# wmt opt set editor "vim"
 
 wmt env use dev
 wmt env set baseUrl http://localhost:8080/v1
@@ -70,19 +70,13 @@ wmt template delete <name>
 ### eval
 ```sh
 wmt template eval <name> [-p <param>=<value>...]
-
-## Other Commands
-
-### uuid
-```sh
-wmt uuid [--v4]
 ```
 
-Generate a UUID (default: V1).
+## Options Commands
 
 ### set
 ```sh
-wmt set <key> <value>
+wmt opt set <key> <value>
 ```
 
 Set an option value.
@@ -98,18 +92,34 @@ you close the window. For example, use `code -w` for VS Code.
 
 ### unset
 ```sh
-wmt unset <key>
+wmt opt unset <key>
 ```
 
 Unset an option value.
 
 ### get
 ```sh
-wmt get <key>
-wmt get all
+wmt opt get <key>
 ```
 
-Show the current value of an option (or all options).
+Show the current value of an option.
+
+### list
+```sh
+wmt opt list
+```
+
+Show all option values.
+
+## Other Commands
+
+### uuid
+```sh
+wmt uuid [--v4]
+```
+
+Generate a UUID (default: V1).
+
 
 ### history
 ```sh

@@ -1,6 +1,7 @@
 package template
 
 import (
+	"bytes"
 	"database/sql"
 	"fmt"
 	htmltemplate "html/template"
@@ -10,6 +11,7 @@ import (
 	"text/template"
 
 	"github.com/jbchouinard/wmt/database"
+	"github.com/jbchouinard/wmt/env"
 	"github.com/jbchouinard/wmt/errored"
 	"github.com/jbchouinard/wmt/path"
 )
@@ -75,6 +77,34 @@ func (t *Template) Parse() error {
 		t.TextTemplate = tmpl
 	}
 	return nil
+}
+
+func (t *Template) Eval(e *env.Env, params []*env.Param) ([]byte, error) {
+	args := e.GetAll()
+	env.AddParams(args, params)
+	if t.IsHTML {
+		if t.HTMLTemplate == nil {
+			if err := t.Parse(); err != nil {
+				return nil, err
+			}
+		}
+		buf := new(bytes.Buffer)
+		if err := t.HTMLTemplate.Execute(buf, args); err != nil {
+			return nil, err
+		}
+		return buf.Bytes(), nil
+	} else {
+		if t.TextTemplate == nil {
+			if err := t.Parse(); err != nil {
+				return nil, err
+			}
+		}
+		buf := new(bytes.Buffer)
+		if err := t.TextTemplate.Execute(buf, args); err != nil {
+			return nil, err
+		}
+		return buf.Bytes(), nil
+	}
 }
 
 func createTemplateTable() {

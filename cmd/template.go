@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/jbchouinard/wmt/editor"
+	"github.com/jbchouinard/wmt/env"
 	"github.com/jbchouinard/wmt/errored"
 	"github.com/jbchouinard/wmt/template"
 	"github.com/spf13/cobra"
@@ -12,7 +13,7 @@ import (
 
 var templateCmd = &cobra.Command{
 	Use:   "template",
-	Short: "Template commands.",
+	Short: "Template commands",
 }
 
 var templateListCmd = &cobra.Command{
@@ -81,13 +82,38 @@ var templateDeleteCmd = &cobra.Command{
 	},
 }
 
+var templateEvalCmd = &cobra.Command{
+	Use:   "eval <name>",
+	Args:  cobra.ExactArgs(1),
+	Short: "Evaluate template",
+	Run: func(cmd *cobra.Command, args []string) {
+		params, err := env.ParseParams(evalTemplateParams)
+		errored.Check(err, "parse params")
+
+		name := args[0]
+		tmpl, err := template.SelectTemplate(name)
+		errored.Check(err, "load template")
+		bytes, err := tmpl.Eval(env.Current, params)
+		errored.Check(err, "template eval")
+		fmt.Printf("%s", bytes)
+	},
+}
+
 var newTemplateHtml bool
+var evalTemplateParams []string
 
 func init() {
 	templateNewCmd.Flags().BoolVar(&newTemplateHtml, "html", false, "is HTML template")
-	templateCmd.AddCommand(templateListCmd)
 	templateCmd.AddCommand(templateNewCmd)
+
+	templateCmd.AddCommand(templateListCmd)
+
 	templateCmd.AddCommand(templateEditCmd)
+
 	templateCmd.AddCommand(templateDeleteCmd)
+
+	templateEvalCmd.Flags().StringSliceVarP(&evalTemplateParams, "param", "p", make([]string, 0), "parameter like foo=bar")
+	templateCmd.AddCommand(templateEvalCmd)
+
 	rootCmd.AddCommand(templateCmd)
 }
