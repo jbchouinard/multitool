@@ -64,7 +64,9 @@ Purge history, keeping n days (default: 7);
 
 ## Files
 
-`multitool` stores its files in `$HOME/.multitool`.
+`multitool` tries to stores its files in `<HOME>/.multitool`. If that fails, it tries `<CURRENTDIR>/.multitool`.
+
+The location can be changed by setting the `MULTITOOL_DIR` environment variable.
 
 ## License
 
