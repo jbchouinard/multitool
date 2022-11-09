@@ -11,7 +11,7 @@ A (currently very small) collection of utility commands with rich features:
 - Linux: X11 dev package, e.g. libx11-dev, xorg-dev or libX11-devel.
 
 ```sh
-go install github.com/jbchouinard/multitool:latest
+go install github.com/jbchouinard/multitool@latest
 ```
 
 ## Commands
