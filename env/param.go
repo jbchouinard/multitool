@@ -5,23 +5,23 @@ import (
 	"strings"
 )
 
-type Param struct {
+type KV struct {
 	Key   string
 	Value string
 }
 
-func ParseParam(s string) (*Param, error) {
+func ParseKV(s string) (*KV, error) {
 	parts := strings.Split(s, "=")
 	if len(parts) != 2 {
-		return nil, errors.New("expected param like foo=bar")
+		return nil, errors.New("expected key-value like foo=bar")
 	}
-	return &Param{parts[0], parts[1]}, nil
+	return &KV{parts[0], parts[1]}, nil
 }
 
-func ParseParams(ss []string) ([]*Param, error) {
-	params := make([]*Param, 0, len(ss))
+func ParseKVs(ss []string) ([]*KV, error) {
+	params := make([]*KV, 0, len(ss))
 	for _, s := range ss {
-		if p, err := ParseParam(s); err != nil {
+		if p, err := ParseKV(s); err != nil {
 			return nil, err
 		} else {
 			params = append(params, p)
@@ -30,8 +30,8 @@ func ParseParams(ss []string) ([]*Param, error) {
 	return params, nil
 }
 
-func AddParams(m map[string]string, params []*Param) {
-	for _, p := range params {
+func AddKVs(m map[string]string, kvs []*KV) {
+	for _, p := range kvs {
 		m[p.Key] = p.Value
 	}
 }

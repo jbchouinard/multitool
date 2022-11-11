@@ -14,6 +14,7 @@ var uuidV4 bool
 var uuidCmd = &cobra.Command{
 	Use:   "uuid",
 	Short: "Generate a UUID",
+	Args:  cobra.ExactArgs(0),
 	Run: func(cmd *cobra.Command, args []string) {
 		var id uuid.UUID
 		var err error

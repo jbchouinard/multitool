@@ -2,6 +2,7 @@ package clip
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/jbchouinard/wmt/config"
 	"golang.design/x/clipboard"
@@ -17,9 +18,11 @@ func init() {
 	if enabled {
 		err := clipboard.Init()
 		if err != nil {
-			fmt.Println("Clipboard failed to init")
-			fmt.Println("Disable with: wmt set clipboard no")
-			panic(err)
+			fmt.Println(err)
+			fmt.Println("Clipboard integration failed to init, disabling")
+			fmt.Println("Re-enable with: wmt opt clipboard yes")
+			config.Set("clipboard", "no")
+			os.Exit(1)
 		}
 	}
 

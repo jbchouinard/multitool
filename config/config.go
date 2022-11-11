@@ -46,12 +46,12 @@ func Get(k string) string {
 
 func Set(key string, value string) error {
 	if DefaultValues[key] == "" {
-		return fmt.Errorf("invalid option key %q\n", key)
+		return fmt.Errorf("invalid option key %q", key)
 	}
 	valid := ValidValues[key]
 	if valid != nil {
 		if !valid[value] {
-			return fmt.Errorf("invalid option value %q\n", value)
+			return fmt.Errorf("invalid option value %q", value)
 		}
 	}
 	_, err := database.TxExec(
@@ -65,7 +65,7 @@ func Set(key string, value string) error {
 
 func Unset(key string) error {
 	if DefaultValues[key] == "" {
-		return fmt.Errorf("invalid option key %q\n", key)
+		return fmt.Errorf("invalid option key %q", key)
 	}
 	_, err := database.TxExec("DELETE FROM settings WHERE key=?", key)
 	errored.Check(err, "unset option")

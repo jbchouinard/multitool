@@ -29,7 +29,7 @@ var templateListCmd = &cobra.Command{
 }
 
 var templateNewCmd = &cobra.Command{
-	Use:   "add <name>",
+	Use:   "add name",
 	Args:  cobra.ExactArgs(1),
 	Short: "Create a new template",
 	Long: `Create a new template. Variables like {{.foo}} are substituted.
@@ -49,7 +49,7 @@ See https://pkg.go.dev/text/template for details on template syntax.
 }
 
 var templateEditCmd = &cobra.Command{
-	Use:   "edit <name>",
+	Use:   "edit name",
 	Args:  cobra.ExactArgs(1),
 	Short: "Edit an existing template",
 	Long: `Edit an existing template. Variables like {{.foo}} are substituted.
@@ -60,8 +60,7 @@ See https://pkg.go.dev/text/template for details on template syntax.
 		name := args[0]
 		tmpl, err := template.SelectTemplate(name)
 		errored.Check(err, "load template")
-		filename := tmpl.Path()
-		err = editor.Edit(filename, true)
+		err = editor.Edit(tmpl.Path(), true)
 		errored.Check(err, "edit template")
 		err = tmpl.Parse()
 		errored.Check(err, "validate")
@@ -69,7 +68,7 @@ See https://pkg.go.dev/text/template for details on template syntax.
 }
 
 var templateDeleteCmd = &cobra.Command{
-	Use:   "delete <name>",
+	Use:   "delete name",
 	Args:  cobra.ExactArgs(1),
 	Short: "Delete template",
 	Run: func(cmd *cobra.Command, args []string) {
@@ -83,11 +82,11 @@ var templateDeleteCmd = &cobra.Command{
 }
 
 var templateEvalCmd = &cobra.Command{
-	Use:   "eval <name>",
+	Use:   "eval name",
 	Args:  cobra.ExactArgs(1),
 	Short: "Evaluate template",
 	Run: func(cmd *cobra.Command, args []string) {
-		params, err := env.ParseParams(evalTemplateParams)
+		params, err := env.ParseKVs(evalTemplateParams)
 		errored.Check(err, "parse params")
 
 		name := args[0]

@@ -82,7 +82,7 @@ type EnvVar struct {
 }
 
 func (v *EnvVar) String() string {
-	return fmt.Sprintf("%-8s %-16s %s", v.Source, v.Key, v.Value)
+	return fmt.Sprintf("%-16s %-16s %s", v.Source, v.Key, v.Value)
 }
 
 func (e *Env) List() []*EnvVar {

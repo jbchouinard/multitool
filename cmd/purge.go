@@ -12,6 +12,7 @@ var keepDays uint16
 var purgeCmd = &cobra.Command{
 	Use:   "purge",
 	Short: "Purge command history",
+	Args:  cobra.ExactArgs(0),
 	Run: func(cmd *cobra.Command, args []string) {
 		asOf := time.Now().UTC().AddDate(0, 0, -int(keepDays))
 		history.Purge(asOf)

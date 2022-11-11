@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
 	"text/template"
 
 	"github.com/jbchouinard/wmt/database"
@@ -31,7 +32,7 @@ func TemplatePath(name string) string {
 	return filepath.Join(templateDir, name+".tmpl")
 }
 
-type Template struct {
+type FileTemplate struct {
 	id           int64
 	Name         string
 	IsHTML       bool
@@ -39,11 +40,18 @@ type Template struct {
 	TextTemplate *template.Template
 }
 
-func (t *Template) Path() string {
+func (t *FileTemplate) Id() int64 {
+	return t.id
+}
+
+func (t *FileTemplate) Path() string {
 	return TemplatePath(t.Name)
 }
 
-func (t *Template) String() string {
+func (t *FileTemplate) String() string {
+	if t == nil {
+		return "empty"
+	}
 	var kind string
 	if t.IsHTML {
 		kind = "html"
@@ -53,24 +61,24 @@ func (t *Template) String() string {
 	return fmt.Sprintf("%s %s@%s", t.Name, kind, t.Path())
 }
 
-func newTemplate(id int64, name string, isHtml bool) *Template {
-	return &Template{id, name, isHtml, nil, nil}
+func newTemplate(id int64, name string, isHtml bool) *FileTemplate {
+	return &FileTemplate{id, name, isHtml, nil, nil}
 }
 
-func (t *Template) Parse() error {
+func (t *FileTemplate) Parse() error {
 	contentBytes, err := ioutil.ReadFile(TemplatePath(t.Name))
 	if err != nil {
 		return err
 	}
 	content := string(contentBytes)
 	if t.IsHTML {
-		tmpl, err := htmltemplate.New(t.Name).Parse(content)
+		tmpl, err := htmltemplate.New(t.Name).Option("missingkey=error").Parse(content)
 		if err != nil {
 			return err
 		}
 		t.HTMLTemplate = tmpl
 	} else {
-		tmpl, err := template.New(t.Name).Parse(content)
+		tmpl, err := template.New(t.Name).Option("missingkey=error").Parse(content)
 		if err != nil {
 			return err
 		}
@@ -79,9 +87,31 @@ func (t *Template) Parse() error {
 	return nil
 }
 
-func (t *Template) Eval(e *env.Env, params []*env.Param) ([]byte, error) {
+func EvalString(name string, tmpl string, e *env.Env, ps []*env.KV) (string, error) {
+	args := MakeArgs(e, ps)
+	if strings.Contains(tmpl, "{{") {
+		sTemplate, err := template.New(name).Option("missingkey=error").Parse(tmpl)
+		if err != nil {
+			return "", err
+		}
+		var buf bytes.Buffer
+		if err := sTemplate.Execute(&buf, args); err != nil {
+			return "", err
+		}
+		return string(buf.Bytes()), nil
+	} else {
+		return tmpl, nil
+	}
+}
+
+func MakeArgs(e *env.Env, ps []*env.KV) map[string]string {
 	args := e.GetAll()
-	env.AddParams(args, params)
+	env.AddKVs(args, ps)
+	return args
+}
+
+func (t *FileTemplate) Eval(e *env.Env, params []*env.KV) ([]byte, error) {
+	args := MakeArgs(e, params)
 	if t.IsHTML {
 		if t.HTMLTemplate == nil {
 			if err := t.Parse(); err != nil {
@@ -118,7 +148,7 @@ func createTemplateTable() {
 	errored.Check(err, "init db.template")
 }
 
-func CreateTemplate(name string, isHtml bool) (*Template, error) {
+func CreateTemplate(name string, isHtml bool) (*FileTemplate, error) {
 	tmpl := newTemplate(0, name, isHtml)
 	res, err := database.TxExec(
 		`INSERT INTO template(name, is_html)
@@ -136,7 +166,7 @@ func CreateTemplate(name string, isHtml bool) (*Template, error) {
 	return tmpl, nil
 }
 
-func (t *Template) Update() error {
+func (t *FileTemplate) Update() error {
 	_, err := database.TxExec(
 		`UPDATE template SET
 			name=?, is_html=?
@@ -146,7 +176,7 @@ func (t *Template) Update() error {
 	return err
 }
 
-func (t *Template) Delete() {
+func (t *FileTemplate) Delete() {
 	_, err := database.TxExec("DELETE FROM template WHERE id=?", t.id)
 	errored.Check(err, "delete template")
 }
@@ -156,7 +186,7 @@ func DeleteTemplate(name string) {
 	errored.Check(err, "delete template")
 }
 
-func SelectTemplate(name string) (*Template, error) {
+func SelectTemplate(name string) (*FileTemplate, error) {
 	var id int64
 	var isHtml bool
 
@@ -172,8 +202,8 @@ func SelectTemplate(name string) (*Template, error) {
 	return newTemplate(id, name, isHtml), nil
 }
 
-func ListTemplates() []*Template {
-	templates := make([]*Template, 0)
+func ListTemplates() []*FileTemplate {
+	templates := make([]*FileTemplate, 0)
 	err := database.TxQuery("SELECT id, name, is_html FROM template")(func(row *sql.Rows) error {
 		var id int64
 		var name string

@@ -23,7 +23,7 @@ var envGetCmd = &cobra.Command{
 }
 
 var envSetCmd = &cobra.Command{
-	Use:   "set <key> <value>",
+	Use:   "set KEY VALUE",
 	Short: "Set env variables",
 	Args:  cobra.ExactArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
@@ -33,7 +33,7 @@ var envSetCmd = &cobra.Command{
 }
 
 var envUnsetCmd = &cobra.Command{
-	Use:   "unset <key>",
+	Use:   "unset KEY",
 	Short: "Unset env variable",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
@@ -45,6 +45,7 @@ var envUnsetCmd = &cobra.Command{
 var envListCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List environment variables",
+	Args:  cobra.ExactArgs(0),
 	Run: func(cmd *cobra.Command, args []string) {
 		vars := useEnv().List()
 		for _, v := range vars {
@@ -63,7 +64,7 @@ var envCurrentCmd = &cobra.Command{
 }
 
 var envUseCmd = &cobra.Command{
-	Use:   "use [<env>]",
+	Use:   "use [name]",
 	Short: "Set current env in use (default: global)",
 	Args:  cobra.MaximumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {

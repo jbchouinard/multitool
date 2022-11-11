@@ -72,14 +72,24 @@ wmt template delete <name>
 wmt template eval <name> [-p <param>=<value>...]
 ```
 
-## Options Commands
+## Options
 
-### set
+### opt
+
+List all options:
 ```sh
-wmt opt set <key> <value>
+wmt opt
 ```
 
-Set an option value.
+Get an option value:
+```sh
+wmt opt <key>
+```
+
+Set an option value (set to _ to clear the option):
+```sh
+wmt opt <key> <value>
+```
 
 | Key       | Values | Default | Details                       |
 ------------|--------|---------|-------------------------------|
@@ -88,28 +98,7 @@ Set an option value.
 | editor    | *      | nano    | Text editor to spawn.         |
 
 If using a GUI text editor, the text editor command should not return until
-you close the window. For example, use `code -w` for VS Code.
-
-### unset
-```sh
-wmt opt unset <key>
-```
-
-Unset an option value.
-
-### get
-```sh
-wmt opt get <key>
-```
-
-Show the current value of an option.
-
-### list
-```sh
-wmt opt list
-```
-
-Show all option values.
+the window is closed. For example, use `code -w` for VS Code.
 
 ## Other Commands
 
